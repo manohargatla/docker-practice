@@ -1,3 +1,5 @@
+Day1
+----
 * Docker installation steps
     * To install docker firstly we have to create a linux machine.
     * Required commands for installation of docker
@@ -34,6 +36,47 @@
 * Explain docker architecture?
   * Docker architecture. Docker uses a client-server architecture. The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing your Docker containers. The Docker client and daemon can run on the same system, or you can connect a Docker client to a remote Docker daemon.
   * ![preview](images/docker10.png)
+
+Day2
+---
+* Nodejs-Express application
+  * commands to build and create.
+  * To build image:"docker image build -t node1:16-alpine ." <name:version>
+  * To Create container :"docker container run --name newjs -d -P 1a0288859300 =>"<image name/id>
+
+ * trail-1
+ * FROM node:16-alpine
+ * LABEL author="Manu" organization="khaja.tec" project="nodejs"
+ * RUN apk add --update npm && \
+   * apk add git && \
+   * git clone https://github.com/expressjs/express.git && \
+   * cd express && \
+   * npm install express && \
+   * npm install -g express-generator@4 && \
+   * express /tmp/foo && \
+   * cd /tmp/foo && \
+   * npm install
+* WORKDIR /tmp/foo
+* EXPOSE 3000
+* CMD ["npm", "start"]
+
+output :
+![preview](images/docker12.png)
+
+trail-2
+FROM node:16-alpine
+LABEL author="Manu" organization="khaja.tec" project="nodejs"
+RUN apk add --update  && \
+    apk add git && \
+    git clone https://github.com/expressjs/express.git \
+    && cd express && \
+    npm install express && \
+    npm install -g express-generator@4 && \
+    express /tmp/foo && cd /tmp/foo && \
+    npm install
+WORKDIR /tmp/foo
+EXPOSE 3000
+CMD ["npm", "start"]
 
 
     
