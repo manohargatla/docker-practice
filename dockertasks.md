@@ -139,7 +139,11 @@ RUN apt-get install jenkins -y
 EXPOSE 8080
 CMD ["/usr/bin/jenkins"]````
 `docker build image -t jenkins .`
+* ![preview](day3-docker/jenkins/images/doc3.png)
 `docker container run -- name manu -d -P jenkins`
+* ![preview](day3-docker/jenkins/images/doc2.png)
+* ![preview](day3-docker/jenkins/images/doc0.png)
+* ![preview](day3-docker/jenkins/images/doc1.png)
 
 Create nop commerce and my-sql server  containers and try to make them work by configuring.
 -------------------------------------------------------------------------------------------
