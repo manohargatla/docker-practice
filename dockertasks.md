@@ -10,8 +10,7 @@ Day1
     * Exit from the linux machine
     * Reconnect it 
     * type the command `docker info`
-    * ![preview](images/docker1.png)
-* DOCKER WORKBOOK – 1
+    * DOCKER WORKBOOK – 1
  * RUNNING DOCKER CONTAINERS  
 * Run hello-world docker container and observe the container status?
   * `docker container run -d -P --name myworld hello-world:latest`
@@ -77,6 +76,80 @@ RUN apk add --update  && \
 WORKDIR /tmp/foo
 EXPOSE 3000
 CMD ["npm", "start"]
+![preview](images/docker12.png)
+
+Day-3
+-----
+Create an alpine container in interactive mode and instal python 
+------------------------------------------------------------------
+  * Ans: `docker container run -it --name alpine1 -P alpine:3.16` 
+  *  `apk add --update`
+  *  `apk add python3` 
+  *  `python3 --version`
+  * ![preview](images/docker1.png)
+  
+Create an ubuntu container with sleep 1d then login user exec.Install python
+----------------------------------------------------------------------------
+  * Ans:`docker container run -d --name py -P ubuntu:20.04 sleep 1d`,
+  * `docker container exec -it py /bin/bash`,
+  * `apt update`,`apt install python3` 
+  * `python3 --version`
+  * ![preview](images/docker2.png)
+  * ![preview](images/docker3.png)
+
+Create a postgress container with user panoramic and password as trekking. try logging in and show the databases (querry for thr psql)
+--------------------------------------------------------------------------------------------------------------------------------------
+  * Ans:`docker container run -d --name database -e POSTGRES_USER=panoramic -e POSTGRES_PASSWORD=trekking -e POSTGRES_DB=psqldata -P postgres:15`,`docker exec -it database /bin/bash`,`psql --help`,this command is used to list the database `\l`
+  * ![preview](day3-docker/images/docker1.png)
+  * ![preview](day3-docker/images/docker2.png)
+  * ![preview](day3-docker/images/docker3.png)
+  * ![preview](day3-docker/images/docker4.png)
+  * ![preview](day3-docker/images/docker5.png)
+  *  * To create table `CREATE TABLE Persons (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);`
+`Insert into Persons Values (1, 'manohar', 'gatla', 'srnagar', 'hyd'); Insert into Persons Values (2, 'raju', 'gatla', 'srnagar', 'hyd'); Insert into Persons Values (3, 'pavan', 'gatla', 'srnagar','hyd'); Insert into Persons Values (4, 'Rajreddy', 'gatla', 'srnagar', 'hyd');
+SELECT * from Person;`"`
+  * ![preview](day3-docker/images/docker6.png)
+  
+Try creating a docker file which runs phpinfo page, user ARG and ENV wherever appropriate 
+ ----------------------------------------------------------------------------------------
+  * on apache server
+  * ` docker image build -t apache .`
+  * ` docker container run --name php -d -P apache`
+  * ![preview](images/php-doc1.png)
+  * ![preview](images/php-doc2.png)
+
+create a jenkins image by creating your own Dockerfile
+-------------------------------------------------------bash
+FROM ubuntu:22.04
+LABEL author="manu"
+RUN apt update && apt install openjdk-11-jdk maven curl -y
+RUN curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | tee \
+   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+RUN echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+RUN apt-get update 
+RUN apt-get install jenkins -y
+EXPOSE 8080
+CMD ["/usr/bin/jenkins"]````
+`docker build image -t jenkins .`
+`docker container run -- name manu -d -P jenkins`
+
+Create nop commerce and my-sql server  containers and try to make them work by configuring.
+-------------------------------------------------------------------------------------------
+* `dockerimage build -t nop:latest`
+* ![preview](images/nop-doc3.png)
+* `docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=manoharg -e MYSQL_DATABASE=test -e MYSQL_USER=manu -e MYSQL_PASSWORD=gatla --network nopnetwork -v mysql:/var/lib/mysql mysql:5.6`
+* ![preview](images/nop-doc2.png)
+* `docker container run --name nopapp -d --name mypythonapp -e MYSQL_SERVER=mysql --network nopnetwork -P nop:latest`
+* ![preview](images/nop-doc1.png)
+
 
 
     

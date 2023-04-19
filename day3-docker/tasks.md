@@ -19,11 +19,15 @@
 `Insert into Persons Values (1, 'manohar', 'gatla', 'srnagar', 'hyd'); Insert into Persons Values (2, 'raju', 'gatla', 'srnagar', 'hyd'); Insert into Persons Values (3, 'pavan', 'gatla', 'srnagar','hyd'); Insert into Persons Values (4, 'Rajreddy', 'gatla', 'srnagar', 'hyd');
 SELECT * from Persons;`"`
 
-* try creating a docker file which runs phpinfo page, user ARG and ENV wherever appropriate 
+ try creating a docker file which runs phpinfo page, user ARG and ENV wherever appropriate 
+ -------------------------------------------------------------------------------
   * on apache server
   * ` docker image build -t apache .`
   * ` docker container run --name php -d -P apache`
-  * 
+  * ![preview](phpinfo/images/doc1.png)
+  * ![preview](phpinfo/images/doc2.png)
+  
   * on nginx server
 * create a jenkins image by creating your own Dockerfile 
+* 
 * Create nop commerce and my-sql server  containers and try to make them work by configuring.
