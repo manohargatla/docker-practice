@@ -86,8 +86,10 @@ Create an alpine container in interactive mode and instal python
   *  `apk add --update`
   *  `apk add python3` 
   *  `python3 --version`
-  * ![preview](images/docker1.png)
-  
+  * ![preview](day3-docker/images/docker1.png)
+  * ![preview](day3-docker/images/docker2.png)
+  * ![preview](day3-docker/images/docker3.png)
+    
 Create an ubuntu container with sleep 1d then login user exec.Install python
 ----------------------------------------------------------------------------
   * Ans:`docker container run -d --name py -P ubuntu:20.04 sleep 1d`,
@@ -100,9 +102,7 @@ Create an ubuntu container with sleep 1d then login user exec.Install python
 Create a postgress container with user panoramic and password as trekking. try logging in and show the databases (querry for thr psql)
 --------------------------------------------------------------------------------------------------------------------------------------
   * Ans:`docker container run -d --name database -e POSTGRES_USER=panoramic -e POSTGRES_PASSWORD=trekking -e POSTGRES_DB=psqldata -P postgres:15`,`docker exec -it database /bin/bash`,`psql --help`,this command is used to list the database `\l`
-  * ![preview](day3-docker/images/docker1.png)
-  * ![preview](day3-docker/images/docker2.png)
-  * ![preview](day3-docker/images/docker3.png)
+ 
   * ![preview](day3-docker/images/docker4.png)
   * ![preview](day3-docker/images/docker5.png)
   *  * To create table `CREATE TABLE Persons (
@@ -151,8 +151,12 @@ Create nop commerce and my-sql server  containers and try to make them work by c
 * ![preview](images/nop-doc3.png)
 * `docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=manoharg -e MYSQL_DATABASE=test -e MYSQL_USER=manu -e MYSQL_PASSWORD=gatla --network nopnetwork -v mysql:/var/lib/mysql mysql:5.6`
 * ![preview](images/nop-doc2.png)
+* ![preview](images/nop-doc5.png)
 * `docker container run --name nopapp -d --name mypythonapp -e MYSQL_SERVER=mysql --network nopnetwork -P nop:latest`
 * ![preview](images/nop-doc1.png)
+* ![preview](images/nop-doc4.png)
+* 
+* 
 
 
 

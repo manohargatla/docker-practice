@@ -26,7 +26,7 @@ RUN apt-get upgrade -y
 RUN apt-get update && apt install nginx -y
 RUN apt-get install php8.1-fpm -y
 RUN chmod -R 777 /var/www/html
-RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
+RUN echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
 RUN service nginx restart
 RUN service php8.1-fpm start
 EXPOSE 80
