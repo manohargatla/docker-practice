@@ -3,7 +3,7 @@ LABEL author="manu"
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install apache2 -y
 RUN apt install php libapache2-mod-php -y
-RUN echo "<?php phpinfo() ?>" > /var/www/html/info.php
+RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
 EXPOSE 80
 CMD ["apache2ctl","-D","FOREGROUND"] 
 
@@ -13,8 +13,12 @@ FROM ubuntu:22.04
 LABEL author="manu"
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install nginx -y
-RUN apt install php php8.1-fpm -y
-RUN echo "<?php phpinfo() ?>" > /var/www/html/info.php
+COPY nginx.conf /etc/nginx/nginx.conf
+RUN service nginx restart
+RUN add-apt-repository ppa:ondrej/php -y
+RUN apt update
+RUN apt install php8.0-fpm php8.0-common -y
+RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"] 
 
@@ -24,6 +28,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN apt-get update && apt install nginx -y
+RUN  echo "<?php phpinfo(); ?>" >> /etc/nginx/nginx.conf
 RUN apt-get install php8.1-fpm -y
 RUN chmod -R 777 /var/www/html
 RUN echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
@@ -32,6 +37,20 @@ RUN service php8.1-fpm start
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"] 
 
+FROM ubuntu:22.04
+LABEL author="manu"
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt upgrade -y
+RUN apt install nginx -y
+RUN apt install php8.1 php8.1-fpm -y
+RUN service php8.1-fpm restart
+COPY nginx.conf /etc/nginx/sites-available/default
+RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
+EXPOSE 80
+CMD ["nginx","-g","daemon off;"]
+
+
+/etc/nginx/sites-available/default
 
 sudo apt-get update -y
 sudo apt-get upgrade -y

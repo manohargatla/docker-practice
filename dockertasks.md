@@ -123,9 +123,16 @@ Try creating a docker file which runs phpinfo page, user ARG and ENV wherever ap
   * ` docker container run --name php -d -P apache`
   * ![preview](images/php-doc1.png)
   * ![preview](images/php-doc2.png)
-
+  
+  * on apache server
+  * ` docker image build -t nginx .`
+  * ![preview](images/php-doc5.png)
+  * ` docker container run --name php -d -P nginx`
+  * ![preview](images/php-doc6.png)
+  * ![preview](images/php-doc4.png)
+  * ![preview](images/php-doc3.png)
 create a jenkins image by creating your own Dockerfile
--------------------------------------------------------bash
+---bash
 FROM ubuntu:22.04
 LABEL author="manu"
 RUN apt update && apt install openjdk-11-jdk maven curl -y
@@ -137,7 +144,7 @@ RUN echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 RUN apt-get update 
 RUN apt-get install jenkins -y
 EXPOSE 8080
-CMD ["/usr/bin/jenkins"]````
+CMD ["/usr/bin/jenkins"]``
 `docker build image -t jenkins .`
 * ![preview](day3-docker/jenkins/images/doc3.png)
 `docker container run -- name manu -d -P jenkins`
@@ -152,11 +159,9 @@ Create nop commerce and my-sql server  containers and try to make them work by c
 * `docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=manoharg -e MYSQL_DATABASE=test -e MYSQL_USER=manu -e MYSQL_PASSWORD=gatla --network nopnetwork -v mysql:/var/lib/mysql mysql:5.6`
 * ![preview](images/nop-doc2.png)
 * ![preview](images/nop-doc5.png)
-* `docker container run --name nopapp -d --name mypythonapp -e MYSQL_SERVER=mysql --network nopnetwork -P nop:latest`
+* `docker container run --name nopapp -d -e MYSQL_SERVER=mysql --network nopnetwork -P nop:latest`
 * ![preview](images/nop-doc1.png)
 * ![preview](images/nop-doc4.png)
-* 
-* 
 
 
 
