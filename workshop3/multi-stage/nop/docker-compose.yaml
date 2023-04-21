@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  nop-db:
+    image: mysql:5.7
+    restart: always
+    container_name: my-sql
+    environment:
+      MYSQL_DATABASE: 'db'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'manumanu'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'manohar'
+      MYSQL_USER: 'nop'
+    expose:
+      - '3306'
+    ports: 
+      - 35000:3306
+    networks:
+      - nop-net
+    volumes:
+      - my-db:/var/lib/mysql
+  nop:
+    container_name: nopapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 30001:5000
+    environment:
+      MYSQL_SERVER: my-sql
+    networks:
+      - nop-net
+    
+# Names our volume
+volumes:
+  my-db:
+# Names our network
+networks:
+  nop-net:
+
+
+
+  ## [server=mysql;uid=root;pwd=rootroot;database=nop] for connection string

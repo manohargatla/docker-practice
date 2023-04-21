@@ -20,6 +20,7 @@ RUN apt update
 RUN apt install php8.0-fpm php8.0-common -y
 RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
 EXPOSE 80
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["nginx","-g","daemon off;"] 
 
 FROM ubuntu:22.04
@@ -36,7 +37,7 @@ RUN service nginx restart
 RUN service php8.1-fpm start
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"] 
-
+``
 FROM ubuntu:22.04
 LABEL author="manu"
 ARG DEBIAN_FRONTEND=noninteractive
@@ -45,9 +46,13 @@ RUN apt install nginx -y
 RUN apt install php8.1 php8.1-fpm -y
 RUN service php8.1-fpm restart
 COPY nginx.conf /etc/nginx/sites-available/default
+RUN nginx -t
+RUN chmod -R 777 /var/www/html
 RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
 EXPOSE 80
-CMD ["nginx","-g","daemon off;"]
+WORKDIR /code
+CMD ["bash","-c","cron","php-fpm"]
+CMD ["nginx","-g","daemon off;"]```
 
 
 /etc/nginx/sites-available/default

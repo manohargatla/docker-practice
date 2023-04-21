@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  spc-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+        - "8000:8080"

@@ -164,5 +164,136 @@ Create nop commerce and my-sql server  containers and try to make them work by c
 * ![preview](images/nop-doc4.png)
 
 
+Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir   
+------------------------------------------------------------------------
+
+1) Create a multi-stage docker file to build  
+---------------------------------------------
+ a) nop commerce
+ ---------------
+  * Created multi stage dockerfile 
+  * ``` bash
+  ## stage-1
+  FROM ubuntu:22.04 as nopCommerce
+  RUN apt update && apt install unzip -y
+  ARG DOWNLOAD_URL=https://github.com/nopSolutions/nopCommerce/releases/download/release-4.60.2/nopCommerce_4.60.2_NoSource_linux_x64.zip
+  ADD ${DOWNLOAD_URL} /nopCommerce/nopCommerce_4.60.2_NoSource_linux_x64.zip
+  RUN cd /nopCommerce && unzip nopCommerce_4.60.2_NoSource_linux_x64.zip && \
+  mkdir bin logs && rm nopCommerce_4.60.2_NoSource_linux_x64.zip
+  ## stage-2
+  FROM mcr.microsoft.com/dotnet/sdk:7.0
+  LABEL author="manu" organization="khaja.tech" project="nop"
+  ARG DIRECTORY=/nop
+  WORKDIR ${DIRECTORY}
+  COPY --from=nopCommerce  /nopCommerce ${DIRECTORY}
+  EXPOSE 5000
+  ENV ASNETCORE_URLS="http://0.0.0.0:5000"
+  CMD ["dotnet","Nop.Web.dll","--urls","http://0.0.0.0:5000"] ```
+  * `docker image build -t nop:1.0 .`
+  * `docker container run -d -P nop:1.0`
+  * ![preview](images/nop-doc-multi-stage1.png)
+  * ![preview](images/nop-doc-multi-stage2.png) 
+ b) spring petclinic
+ ---------------
+  *  Created multi stage dockerfile
+  *  ````bash
+  ## stage -1
+  FROM amazoncorretto:17-alpine-jdk as spc
+  LABEL author="manu" project="springpetclinic" organization="khaja.tech"
+  RUN wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar
+  EXPOSE 8080
+  CMD ["java", "-jar", "/spring-petclinic-2.4.2.jar"]
+  ## stage -2
+  FROM amazoncorretto:11
+  LABEL author="manu" project="springpetclinic" organization="khaja.tech"
+  COPY --from=spc /spring-petclinic-2.4.2.jar /spring-petclinic-2.4.2.jar
+  EXPOSE 8080
+  CMD ["java", "-jar", "/spring-petclinic-2.4.2.jar"] ````\
+
+ * `docker image build -t spc:latest .`
+ * `docker container run -d -P spc:latest`
+ * ![preview](images/spc-doc-mlt-stg1.png)
+ * ![preview](images/spc-doc-mlt-stg2.png) 
+  
+c) student courses register
+ ---------------------------
+ * `docker image build -t sca:1.0`
+ * ![preview](images/studentAPI-doc1.png)
+1) Push these images to
+-------------------------  
+  a) AWS ECR
+
+1) Write a docker compose file for
+------------------------------------
+  a) Nop Commerce
+  ---------------
+  ```yaml
+  version: '3.9'
+services:
+  nop-db:
+    image: mysql:5.7
+    restart: always
+    container_name: my-sql
+    environment:
+      MYSQL_DATABASE: 'db'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'manumanu'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'manohar'
+      # Password for root access
+      MYSQL_USER: 'nop'
+    expose:
+      - '3306'
+    ports: 
+      - 35000:3306
+    networks:
+      - nop-net
+    volumes:
+      - my-db:/var/lib/mysql
+  nop:
+    container_name: nopapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 30001:5000
+    environment:
+      MYSQL_SERVER: my-sql
+    networks:
+      - nop-net
+# Names our volume
+volumes:
+  my-db:
+# Names our network
+networks:
+  nop-net: 
+  ```
+* To configure the docker-compose file it requrires dockerfile also in same directory.
+* To run docker-compose file we have to use command as `docker compose up`
+* ![preview](images/nop-doc-compose1.png)
+* ![preview](images/nop-doc-compose2.png)
+* ![preview](images/nop-doc-compose3.png)
+b) Spring petclinic
+-------------------
+```yaml
+version: '3.9'
+services:
+  spc-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+        - "8000:8080" 
+```
+* To configure the docker-compose file it requrires dockerfile also in same directory.
+* To run docker-compose file we have to use command as `docker compose up`
+* ![preview](images/spc-doc-compose1.png)
+* ![preview](images/spc-doc-compose2.png)
+* ![preview](images/spc-doc-compose3.png)
+
+  c) Game of life
+  d) Student Courses Register
+
+
 
     
