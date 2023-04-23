@@ -131,8 +131,10 @@ Try creating a docker file which runs phpinfo page, user ARG and ENV wherever ap
   * ![preview](images/php-doc6.png)
   * ![preview](images/php-doc4.png)
   * ![preview](images/php-doc3.png)
+
 create a jenkins image by creating your own Dockerfile
----bash
+------------------------------------------------------
+```Dockerfile
 FROM ubuntu:22.04
 LABEL author="manu"
 RUN apt update && apt install openjdk-11-jdk maven curl -y
@@ -144,7 +146,8 @@ RUN echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 RUN apt-get update 
 RUN apt-get install jenkins -y
 EXPOSE 8080
-CMD ["/usr/bin/jenkins"]``
+CMD ["/usr/bin/jenkins"]
+```
 `docker build image -t jenkins .`
 * ![preview](day3-docker/jenkins/images/doc3.png)
 `docker container run -- name manu -d -P jenkins`
@@ -167,12 +170,12 @@ Create nop commerce and my-sql server  containers and try to make them work by c
 Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir   
 ------------------------------------------------------------------------
 
-1) Create a multi-stage docker file to build  
+A) Create a multi-stage docker file to build  
 ---------------------------------------------
  a) nop commerce
  ---------------
   * Created multi stage dockerfile 
-  * ``` bash
+```Dockerfile
   ## stage-1
   FROM ubuntu:22.04 as nopCommerce
   RUN apt update && apt install unzip -y
@@ -188,15 +191,17 @@ Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir
   COPY --from=nopCommerce  /nopCommerce ${DIRECTORY}
   EXPOSE 5000
   ENV ASNETCORE_URLS="http://0.0.0.0:5000"
-  CMD ["dotnet","Nop.Web.dll","--urls","http://0.0.0.0:5000"] ```
+  CMD ["dotnet","Nop.Web.dll","--urls","http://0.0.0.0:5000"] 
+  ```
   * `docker image build -t nop:1.0 .`
   * `docker container run -d -P nop:1.0`
   * ![preview](images/nop-doc-multi-stage1.png)
   * ![preview](images/nop-doc-multi-stage2.png) 
+  
  b) spring petclinic
- ---------------
+ -------------------
   *  Created multi stage dockerfile
-  *  ````bash
+ ```Dockerfile
   ## stage -1
   FROM amazoncorretto:17-alpine-jdk as spc
   LABEL author="manu" project="springpetclinic" organization="khaja.tech"
@@ -208,7 +213,8 @@ Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir
   LABEL author="manu" project="springpetclinic" organization="khaja.tech"
   COPY --from=spc /spring-petclinic-2.4.2.jar /spring-petclinic-2.4.2.jar
   EXPOSE 8080
-  CMD ["java", "-jar", "/spring-petclinic-2.4.2.jar"] ````\
+  CMD ["java", "-jar", "/spring-petclinic-2.4.2.jar"] 
+  ```
 
  * `docker image build -t spc:latest .`
  * `docker container run -d -P spc:latest`
@@ -217,13 +223,47 @@ Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir
   
 c) student courses register
  ---------------------------
- * `docker image build -t sca:1.0`
+   ```Dockerfile
+## multi stage docker file
+## stage 1
+FROM alpine:3.17 as source
+LABEL author="Manohar" project="StudentCoursesRestAPI"
+RUN apk add --update && apk add git
+RUN git clone https://github.com/manohargatla/StudentCoursesRestAPI.git /StudentCoursesRestAPI
+## stage 2
+FROM python:3.7-alpine
+LABEL author="Manohar" project="StudentCoursesRestAPI"
+COPY --from=source /StudentCoursesRestAPI /StudentCoursesRestAPI
+WORKDIR /StudentCoursesRestAPI 
+RUN pip install --upgrade pip 
+RUN pip install -r requirements.txt
+EXPOSE 8080
+ENTRYPOINT ["python","app.py"]
+```
+ * `docker image build -t scr:1.0`
  * ![preview](images/studentAPI-doc1.png)
-1) Push these images to
+ * `docker container run -d -P scr:1.0`
+ * ![preview](images/scr-doc-multi-stage1.png)
+ * ![preview](images/scr-doc-multi-stage2.png)
+ * 
+B) push images to AWS ECR
 -------------------------  
   a) AWS ECR
+  -----------
+* create ECR repo in Aws
+* Install aws cli and Configure
+* Run the commands by using view push commands in ECR
+* `docker image build -t spc .`
+* `docker tag spc:latest 336607023349.dkr.ecr.us-east-1.amazonaws.com/spc:latest`
+* `docker push 336607023349.dkr.ecr.us-east-1.amazonaws.com/spc:latest`
+* ![preview](images/ECR-doc-1.png)
+* ![preview](images/ECR-doc-2.png)
+* ![preview](images/ECR-doc-3.png)
+* ![preview](images/ECR-doc-4.png)
+* ![preview](images/ECR-doc-5.png)
+* ![preview](images/ECR-doc-6.png)
 
-1) Write a docker compose file for
+C) Write a docker compose file for
 ------------------------------------
   a) Nop Commerce
   ---------------
@@ -273,6 +313,7 @@ networks:
 * ![preview](images/nop-doc-compose1.png)
 * ![preview](images/nop-doc-compose2.png)
 * ![preview](images/nop-doc-compose3.png)
+
 b) Spring petclinic
 -------------------
 ```yaml
@@ -291,9 +332,111 @@ services:
 * ![preview](images/spc-doc-compose2.png)
 * ![preview](images/spc-doc-compose3.png)
 
-  c) Game of life
-  d) Student Courses Register
+c) Game of life
+---------------
+```Dockerfile
+## stage-1
+FROM tomcat:9-jdk8 as gol
+LABEL author="khaja" organization="qt"
+ARG GOL_URL=https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/gameoflife.war
+ADD ${GOL_URL} /usr/local/tomcat/webapps/gameoflife.war
+RUN apt update && apt install unzip -y
+RUN unzip /usr/local/tomcat/webapps/gameoflife.war
+VOLUME "/usr/local/tomcat"
+## stage-2
+FROM tomcat:9.0
+LABEL author="manu" organization="khaja.tech"
+COPY --from=gol /usr/local/tomcat/webapps/ /usr/local/tomcat/webapps/
+EXPOSE 8080
+CMD ["catalina.sh","run"]
+```
+* `docker image build -t gol:1.1 .`
+* ![preview](images/gol-doc-mlt-stg1.png)
+* `docker container run -d -P gol:1.1`
+* ![preview](images/gol-doc-mlt-stg2.png)
+* ![preview](images/gol-doc-mlt-stg3.png)
+d) Student Courses Register
+---------------------------
+* docker-compose file
+```yaml
+version: '3.9'
+services:
+  scr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+        - "3000:8080" 
+```
+* docker compose up
+* ![preview](images/scr-doc-compose1.png)
+* ![preview](images/scr-doc-compose2.png)
+* ![preview](images/scr-doc-compose3.png)
+Create Multi-stage build Docker image any opensource code like spring-petclinic, ecomance application
+RUN Application with User in one DockerImage & Application as root user
+-----------------------------------------------------------------------
+ ```Dockerfile
+ ## stage -1
+FROM amazoncorretto:17-alpine-jdk as spc
+LABEL author="manu" project="springpetclinic" organization="khaja.tech"
+RUN wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar
+## stage -2
+FROM amazoncorretto:11-alpine3.14
+LABEL author="manu" project="springpetclinic" organization="khaja.tech"
+ARG user=manu
+ARG group=spcgroup
+ARG uid=12341
+ARG gid=15241
+ARG HOME_DIR=/spring-petclinic-2.4.2.jar
+RUN adduser -h "$HOME_DIR" -u ${uid} -g ${gid} -D -s /bin/bash ${user} \
+&& addgroup -g ${gid} ${group}
+COPY --from=spc /spring-petclinic-2.4.2.jar /spring-petclinic-2.4.2.jar
+EXPOSE 8080
+CMD ["java","-jar","/spring-petclinic-2.4.2.jar"]
+ ```
+Write any Docker compose file
 
-
+nop commerce
+```yaml
+version: '3.9'
+services:
+  nop-db:
+    image: mysql:5.7
+    restart: always
+    container_name: my-sql
+    environment:
+      MYSQL_DATABASE: 'db'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'manumanu'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'manohar'
+      # Password for root access
+      MYSQL_USER: 'nop'
+    expose:
+      - '3306'
+    ports: 
+      - 35000:3306
+    networks:
+      - nop-net
+    volumes:
+      - my-db:/var/lib/mysql
+  nop:
+    container_name: nopapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 30001:5000
+    environment:
+      MYSQL_SERVER: my-sql
+    networks:
+      - nop-net
+# Names our volume
+volumes:
+  my-db:
+# Names our network
+networks:
+  nop-net: 
+```
 
     
