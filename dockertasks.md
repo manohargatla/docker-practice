@@ -288,12 +288,13 @@ B) push images to AWS ECR
 * `docker image build -t spc .`
 * `docker tag spc:latest 336607023349.dkr.ecr.us-east-1.amazonaws.com/spc:latest`
 * `docker push 336607023349.dkr.ecr.us-east-1.amazonaws.com/spc:latest`
+* ![preview](images/ECR-doc-5.png)
+* ![preview](images/ECR-doc-6.png)
 * ![preview](images/ECR-doc-1.png)
 * ![preview](images/ECR-doc-2.png)
 * ![preview](images/ECR-doc-3.png)
 * ![preview](images/ECR-doc-4.png)
-* ![preview](images/ECR-doc-5.png)
-* ![preview](images/ECR-doc-6.png)
+
 
 C) Write a docker compose file for
 ------------------------------------
@@ -369,7 +370,7 @@ c) Game of life
 ```Dockerfile
 ## stage-1
 FROM tomcat:9-jdk8 as gol
-LABEL author="khaja" organization="qt"
+LABEL author="manu" organization="qt"
 ARG GOL_URL=https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/gameoflife.war
 ADD ${GOL_URL} /usr/local/tomcat/webapps/gameoflife.war
 RUN apt update && apt install unzip -y
