@@ -372,29 +372,62 @@ services:
 * ![preview](images/scr-doc-compose1.png)
 * ![preview](images/scr-doc-compose2.png)
 * ![preview](images/scr-doc-compose3.png)
+
 Create Multi-stage build Docker image any opensource code like spring-petclinic, ecomance application
 RUN Application with User in one DockerImage & Application as root user
 -----------------------------------------------------------------------
  ```Dockerfile
- ## stage -1
+## multi stage docker file for studentcourse
+## stage 1
+FROM alpine:3.17 as source
+LABEL author="Manohar" project="StudentCoursesRestAPI"
+RUN apk add --update && apk add git
+RUN git clone https://github.com/manohargatla/StudentCoursesRestAPI.git /StudentCoursesRestAPI
+## stage 2
+FROM python:3.7-alpine
+LABEL author="Manohar" project="StudentCoursesRestAPI"
+ARG user=manu
+ARG group=gatla
+ARG gid=10000
+ARG uid=10001
+ARG HOME_DIR=/StudentCoursesRestAPI
+RUN addgroup -g ${gid} ${group} \
+&& adduser -h "$HOME_DIR" -u ${uid} -g ${gid} -D -s /bin/bash ${user}
+USER ${user}
+COPY --from=source /StudentCoursesRestAPI ${HOME_DIR}
+WORKDIR ${HOME_DIR} 
+RUN pip install --upgrade pip 
+RUN pip install -r requirements.txt
+EXPOSE 8080
+ENTRYPOINT ["python","app.py"]
+ ```
+
+ ## Application with User in one DockerImage & Application as root user for spc
+------------------------------------------------------------------------------
+ ```Dockerfile
+## stage -1
 FROM amazoncorretto:17-alpine-jdk as spc
 LABEL author="manu" project="springpetclinic" organization="khaja.tech"
-RUN wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar
+ADD https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar /spring-petclinic
 ## stage -2
 FROM amazoncorretto:11-alpine3.14
 LABEL author="manu" project="springpetclinic" organization="khaja.tech"
 ARG user=manu
 ARG group=spcgroup
-ARG uid=12341
-ARG gid=15241
-ARG HOME_DIR=/spring-petclinic-2.4.2.jar
+ARG uid=20000
+ARG gid=20001
+ARG HOME_DIR=/spring-petclinic
 RUN adduser -h "$HOME_DIR" -u ${uid} -g ${gid} -D -s /bin/bash ${user} \
 && addgroup -g ${gid} ${group}
-COPY --from=spc /spring-petclinic-2.4.2.jar /spring-petclinic-2.4.2.jar
+USER ${user}
+ADD --chown=${user}:${group} https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar /spring-petclinic
+COPY --from=spc /spring-petclinic  ${HOME_DIR}/spring-petclinic
+WoRKDIR ${HOME_DIR}
 EXPOSE 8080
-CMD ["java","-jar","/spring-petclinic-2.4.2.jar"]
+CMD ["java","-jar","spring-petclinic-2.4.2.jar"]
  ```
 Write any Docker compose file
+----------------------------
 
 nop commerce
 ```yaml

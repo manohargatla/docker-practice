@@ -67,17 +67,16 @@ FROM python:3.7-alpine
 LABEL author="Manohar" project="StudentCoursesRestAPI"
 ARG user=manu
 ARG group=gatla
-ARG gid=12345
-ARG uid=23456
+ARG gid=10000
+ARG uid=10001
 ARG HOME_DIR=/StudentCoursesRestAPI
 RUN addgroup -g ${gid} ${group} \
 && adduser -h "$HOME_DIR" -u ${uid} -g ${gid} -D -s /bin/bash ${user}
+USER ${user}
 COPY --from=source /StudentCoursesRestAPI ${HOME_DIR}
 WORKDIR ${HOME_DIR} 
 RUN pip install --upgrade pip 
 RUN pip install -r requirements.txt
+EXPOSE 8080
 ENTRYPOINT ["python","app.py"]
-
---uid "$UID"
-
-  
+ 
