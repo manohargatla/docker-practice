@@ -154,7 +154,7 @@ RUN chmod -R 777 /var/www/html
 RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
 RUN service php8.1-fpm restart
 EXPOSE 80
-CMD ["/bin/bash","-c","service php8.1-fpm start && nginx -g 'daemon off;'"]
+ENTRYPOINT ["/bin/bash","-c","service php8.1-fpm start && nginx -g 'daemon off;'"]
 CMD ["nginx","-g","daemon off;"]
 ```
   * ` docker image build -t nginx .`
