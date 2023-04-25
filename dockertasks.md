@@ -44,25 +44,28 @@ Day2
   * To Create container :"docker container run --name newjs -d -P 1a0288859300 =>"<image name/id>
 
  * trail-1
- * FROM node:16-alpine
- * LABEL author="Manu" organization="khaja.tec" project="nodejs"
- * RUN apk add --update npm && \
-   * apk add git && \
-   * git clone https://github.com/expressjs/express.git && \
-   * cd express && \
-   * npm install express && \
-   * npm install -g express-generator@4 && \
-   * express /tmp/foo && \
-   * cd /tmp/foo && \
-   * npm install
-* WORKDIR /tmp/foo
-* EXPOSE 3000
-* CMD ["npm", "start"]
+```Dockerfile
+  FROM node:16-alpine
+  LABEL author="Manu" organization="khaja.tec" project="nodejs"
+  RUN apk add --update npm && \
+    apk add git && \
+    git clone https://github.com/expressjs/express.git && \
+    cd express && \
+    npm install express && \
+    npm install -g express-generator@4 && \
+    express /tmp/foo && \
+    cd /tmp/foo && \
+    npm install
+ WORKDIR /tmp/foo
+ EXPOSE 3000
+ CMD ["npm", "start"]
+```
 
 output :
 ![preview](images/docker12.png)
 
 trail-2
+```Dockerfile
 FROM node:16-alpine
 LABEL author="Manu" organization="khaja.tec" project="nodejs"
 RUN apk add --update  && \
@@ -77,6 +80,7 @@ WORKDIR /tmp/foo
 EXPOSE 3000
 CMD ["npm", "start"]
 ![preview](images/docker12.png)
+```
 
 Day-3
 -----
@@ -119,18 +123,46 @@ SELECT * from Person;`"`
 Try creating a docker file which runs phpinfo page, user ARG and ENV wherever appropriate 
  ----------------------------------------------------------------------------------------
   * on apache server
+``` Dockerfile
+FROM ubuntu:22.04
+LABEL author="manu"
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install apache2 -y
+RUN apt install php libapache2-mod-php -y
+RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
+EXPOSE 80
+CMD ["apache2ctl","-D","FOREGROUND"] 
+```
   * ` docker image build -t apache .`
   * ` docker container run --name php -d -P apache`
   * ![preview](images/php-doc1.png)
   * ![preview](images/php-doc2.png)
   
-  * on apache server
+  * on nginx server
+``` Dockerfile
+  FROM ubuntu:22.04
+LABEL author="manu"
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt upgrade -y
+RUN apt install nginx -y
+RUN apt install php8.1 php8.1-fpm -y && \
+    rm -rf /var/lib/apt/lists/
+
+COPY nginx.conf /etc/nginx/sites-available/default
+RUN nginx -t
+RUN chmod -R 777 /var/www/html
+RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
+RUN service php8.1-fpm restart
+EXPOSE 80
+CMD ["/bin/bash","-c","service php8.1-fpm start && nginx -g 'daemon off;'"]
+CMD ["nginx","-g","daemon off;"]
+```
   * ` docker image build -t nginx .`
   * ![preview](images/php-doc5.png)
   * ` docker container run --name php -d -P nginx`
   * ![preview](images/php-doc6.png)
   * ![preview](images/php-doc4.png)
-  * ![preview](images/php-doc3.png)
+  * ![preview](images/php-doc2.png)
 
 create a jenkins image by creating your own Dockerfile
 ------------------------------------------------------

@@ -38,21 +38,23 @@ RUN service php8.1-fpm start
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"] 
 ``
+## final for nginx
 FROM ubuntu:22.04
 LABEL author="manu"
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt upgrade -y
 RUN apt install nginx -y
-RUN apt install php8.1 php8.1-fpm -y
-RUN service php8.1-fpm restart
+RUN apt install php8.1 php8.1-fpm -y && \
+    rm -rf /var/lib/apt/lists/
 COPY nginx.conf /etc/nginx/sites-available/default
 RUN nginx -t
 RUN chmod -R 777 /var/www/html
 RUN echo "<?php phpinfo() ?>" >> /var/www/html/info.php
+RUN service php8.1-fpm restart
 EXPOSE 80
-WORKDIR /code
-CMD ["bash","-c","cron","php-fpm"]
-CMD ["nginx","-g","daemon off;"]```
+CMD ["/bin/bash","-c","service php8.1-fpm start && nginx -g 'daemon off;'"]
+CMD ["nginx","-g","daemon off;"]
+```
 
 
 /etc/nginx/sites-available/default
