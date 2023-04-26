@@ -504,5 +504,33 @@ volumes:
 networks:
   nop-net: 
 ```
-
+## Docker MOCK-INTERVIEW Qus
+# Explain Docker Images
+* A Docker image is a file used to execute code in a Docker container. Docker images act as a set of instructions to build a Docker container, like a template. Docker images also act as the starting point when using Docker. An image is comparable to a snapshot in virtual machine (VM) environments.
+# What are different ways of building docker images?
+* Creating a Docker Image for your Application
+* Write a Dockerfile for your application.
+* Build the image with docker build command.
+* Host your Docker image on a registry.
+* Pull and run the image on the target machine.
+# What is Dockerfile?
+* Docker can build images automatically by reading the instructions from a file called Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using docker build, users can create an automated build that executes several command-line instructions in succession.
+# How is container different than VM?
+* Containers are deployed applications bundled with all necessary dependencies and configuration files. All of the elements share the same OS kernel.
+* Virtualization is the means of employing software (such as Hypervisor) to create a virtual version of a resource such as a server, data storage, or application. 
+* Virtualization is an abstract version of a physical machine, while containerization is the abstract version of an application.
+# Can you tell something about namespaces and how they are used in Docker?
+* Docker uses a technology called namespaces to provide the isolated workspace called the container. Docker uses namespaces of various kinds to provide the isolation that containers need in order to remain portable and refrain from affecting the remainder of the host system.
+# What is difference between ADD and COPY Instruction?
+* COPY instruction just copies the files from the local host machine to the container file system. ADD instruction potentially could retrieve files from remote URLs and perform operations such as unpacking.
+# Can you explain the concept of Layers in Docker Image
+* Docker layers are the fundamental building blocks for creating, deploying, and scaling systems. This technology significantly reduces inefficiencies in software development pertaining to application dependency management, versioning issues, and long-term maintenance efforts.
+# What is the purpose of EXPOSE and VOLUME instruction in Dockerfile?
+* The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
+* The Dockerfile VOLUME instruction creates a volume mount point at a specified container path. A volume will be mounted from your Docker host's filesystem each time a container starts.
+# What is your workflow for CI/CD with Docker Containers and where do you store images?
+* An integration and test system that builds the docker image and runs a series of tests.
+* The Docker Images and other objects are store inside the docker directory in the local machine. They are depending upon the default storage driver used by the machine.
+* When we create Docker objects such as images, containers, volumes, etc. all these objects are store inside a directory in our local machine. By default, all the Docker objects are store in the following directory.
+ /var/lib/docker/<storage-driver>
     
