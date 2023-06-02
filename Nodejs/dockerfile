@@ -83,3 +83,37 @@ WORKDIR /tmp/foo
 RUN npm install
 EXPOSE 3000
 ENTRYPOINT ["npm","start"]
+
+
+## working
+FROM node:16-alpine
+RUN apk add --update
+RUN apk add git
+RUN git clone https://github.com/expressjs/express.git
+RUN cd express
+WORKDIR /express
+RUN npm install express
+RUN npm install -g express-generator@4
+RUN express /tmp/foo
+WORKDIR /tmp/foo
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+
+## working
+FROM node:16-alpine
+RUN apk add --update
+RUN apk add git
+RUN git clone https://github.com/expressjs/express.git
+RUN cd express && \
+    npm install express && \
+    npm install -g express-generator@4 && \
+    express /tmp/foo
+WORKDIR /tmp/foo
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+
+
+
+

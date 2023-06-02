@@ -524,7 +524,8 @@ networks:
 # What is difference between ADD and COPY Instruction?
 * COPY instruction just copies the files from the local host machine to the container file system. ADD instruction potentially could retrieve files from remote URLs and perform operations such as unpacking.
 # Can you explain the concept of Layers in Docker Image
-* Docker layers are the fundamental building blocks for creating, deploying, and scaling systems. This technology significantly reduces inefficiencies in software development pertaining to application dependency management, versioning issues, and long-term maintenance efforts.
+* A Docker image is built up from a series of layers. Each layer represents an instruction in the image's Dockerfile.
+* The container starts at the first instruction in the file and executes all instructions in order.
 # What is the purpose of EXPOSE and VOLUME instruction in Dockerfile?
 * The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 * The Dockerfile VOLUME instruction creates a volume mount point at a specified container path. A volume will be mounted from your Docker host's filesystem each time a container starts.
@@ -533,4 +534,92 @@ networks:
 * The Docker Images and other objects are store inside the docker directory in the local machine. They are depending upon the default storage driver used by the machine.
 * When we create Docker objects such as images, containers, volumes, etc. all these objects are store inside a directory in our local machine. By default, all the Docker objects are store in the following directory.
  /var/lib/docker/<storage-driver>
+
+
+ ## JOIP Questions
+# 1.How do you check the permissions of a file or directory in Linux?
+* ls -al <filename/directoryname>
+2.What does the permission string "drwxr-xr-x" mean?
+* Having permissions for a folder which has read, write and execute permissions for the owner, but only read and execute permissions for the group and for other users.
+3.How do you change the permissions of a file using the chmod command?
+4.What is the numeric representation of the read, write, and execute permissions in Linux?
+5.How do you set the permissions to read and write for the owner, read-only for the group, and no permissions for others?
+6.What is the difference between the "chmod" and "chown" commands?
+How can you add or remove specific permissions without affecting the existing permissions?
+7.Write a systemd service file for deploying a web application named "spring-petclinic" that needs to run as a user "spring" and group "spring". The application is located in the directory "path of you application" and the command to start the application is "java -jar "spring-petclinic.jar". The application requires the environment variable "ENV_VAR" with a value of "dev". Ensure that the application restarts automatically if it crashes.
+8. How can you create a file named "myfile.txt" in the current directory using a command?
+9.What command would you use to create a directory named "mydirectory" in the current directory?
+10.How do you delete a file named "myfile.txt" in the current directory?
+11.Which command would you use to delete an empty directory named "mydirectory" in the current directory?
+12.If you want to delete a directory named "mydirectory" and all its contents recursively, which command would you use?
+13.Which text editor can you use to edit a file named "myfile.txt" in Linux?
+14.How can you move a file named "myfile.txt" to the directory "/path/to/new/location" using a command?
+15.What command would you use to rename a file named "oldname.txt" to "newname.txt" in the current directory?
+16.How can I use netstat to display all established network connections?
+17.What is the command to show listening ports using netstat?
+18.How do I use netstat to display the routing table?
+19.How can I use ifconfig to view the IP address of a specific network interface?
+20.What is the command to enable or disable a network interface using ifconfig?
+21.How do I use ifconfig to change the MAC address of a network interface?
+22.How can I use the host command to perform a reverse DNS lookup?
+23.What is the syntax to specify a specific DNS server when using host?
+24.How do I use host to query a specific record type, such as MX or NS?
+25.What is the command to display the current hostname of a system using hostname?
+26.How can I change the hostname of a system using the hostname command?
+27.How do I set a fully qualified domain name (FQDN) using hostname?
+28.How do I perform a DNS lookup for a specific domain using dig?
+29.What is the command to retrieve the DNSSEC-related information for a domain using dig?
+30.How can I use dig to query a specific DNS server directly?
+31.How do I establish a telnet connection to a remote host using the telnet command?
+32.What is the command to specify a specific port when using telnet?
+33.How can I exit a telnet session gracefully?
+34.What is the command to send a specific number of ICMP echo requests using ping?
+35.How can I specify a specific source IP address when using ping?
+36.How do I use ping to continuously send ICMP echo requests until interrupted?
+37.How do I use curl to download a file from a remote server?
+38.What is the command to follow HTTP redirects using curl?
+39.How can I limit the download speed using wget?
+40.How can I use df to display the disk space usage of filesystems?
+41.What is the command to show the disk space usage of a specific directory using du?
+42.How do I display the disk space usage in human-readable format with du?
+43.What is the command to list all running processes using ps?
+44.How can I display detailed information about a specific process using ps?
+45.How do I sort the process list by CPU usage using ps?
+46.How do I display the routing table using the route command?
+47.What is the command to add a new route using route?
+48.How can I delete a specific route from the routing table using route?
+49.How can I use top to monitor system resource usage in real-time?
+50.What is the command to sort processes by memory usage using top?
+51.How do I launch the interactive process viewer htop?
+52.How do I use traceroute to trace the route packets
+53.How do I create a new user account using the useradd command?
+54.What is the command to specify the home directory for a new user with useradd?
+55.How can I assign a specific user ID (UID) when creating a user with useradd?
+56.What is the difference between useradd and adduser commands?
+57.How do I create a new user account using the adduser command?
+58.What additional features does the adduser command provide compared to useradd?
+59.How do I create a new group using the groupadd command?
+60.What is the command to add a user to an existing group using the usermod command?
+61.How can I list all groups on the system using the getent command?
+62.Changing owner or group for files and directories:
+63.How do I change the owner of a file or directory using the chown command?
+64.What is the command to change the group ownership of a file or directory using chgrp?
+65.How can I recursively change the owner and group of a directory and its contents using chown and chgrp?
+66.How do I generate an SSH key pair using the ssh-keygen command? key name = openkey ? locations in default location
+67.How do I change the current working directory using the cd command?
+68.What is the command to go back to the previous directory using cd?
+69.How can I navigate to a specific directory using a relative path with cd?
+70.How do I search for a specific pattern or string in a file using the grep command?
+71.What is the command to perform a case-insensitive search with grep?
+72.How do I display the contents of a file using the cat command?
+73.What is the command to concatenate multiple files together with cat?
+74.How can I number the lines while displaying the file contents using cat?
+75.How do I display a message or variable value on the terminal using the echo command?
+76.What is the command to redirect the output of echo to a file?
+77.How can I use escape characters with echo to display special characters or formatting?
+78.How do I open and edit a file using the vi command?
+79.How can I save changes and exit the vi editor?
+80.What is the command to open and edit a file using the nano editor?
+81.How do I navigate and make changes in the nano editor?
+82.How can I save changes and exit the nano editor?
     
