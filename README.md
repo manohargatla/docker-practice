@@ -92,8 +92,6 @@ Create an alpine container in interactive mode and instal python
   *  `apk add python3` 
   *  `python3 --version`
   * ![preview](day3-docker/images/docker1.png)
-  * ![preview](day3-docker/images/docker2.png)
-  * ![preview](day3-docker/images/docker3.png)
     
 Create an ubuntu container with sleep 1d then login user exec.Install python
 ----------------------------------------------------------------------------
@@ -101,8 +99,8 @@ Create an ubuntu container with sleep 1d then login user exec.Install python
   * `docker container exec -it py /bin/bash`,
   * `apt update`,`apt install python3` 
   * `python3 --version`
-  * ![preview](images/docker2.png)
-  * ![preview](images/docker3.png)
+  * ![preview](day3-docker/images/docker2.png)
+  * ![preview](day3-docker/images/docker3.png)
 
 Create a postgress container with user panoramic and password as trekking. try logging in and show the databases (querry for thr psql)
 --------------------------------------------------------------------------------------------------------------------------------------
@@ -551,26 +549,49 @@ networks:
 ![preview](images/RWX%20per-2.png)
 # 6.What is the difference between the "chmod" and "chown" commands?
 * chown is an abbreviation for “changing owner”, which is pretty self-explanatory. While chmod(changing file permissions) handles what users can do with a file once they have access to it, chown assigns ownership.
-
 # How can you add or remove specific permissions without affecting the existing permissions?
+* We can use symbolic code plus (+) to add permissions and use minus (–) to remove permissions.
 # 7.Write a systemd service file for deploying a web application named "spring-petclinic" that needs to run as a user "spring" and group "spring". The application is located in the directory "path of you application" and the command to start the application is "java -jar "spring-petclinic.jar". The application requires the environment variable "ENV_VAR" with a value of "dev". Ensure that the application restarts automatically if it crashes.
 # 8. How can you create a file named "myfile.txt" in the current directory using a command?
+* To create a file in the current directory run `touch myfile.txt`
 # 9.What command would you use to create a directory named "mydirectory" in the current directory?
+* To Create a directory run `mkdir mydirectory`
 # 10.How do you delete a file named "myfile.txt" in the current directory?
+* To delete a file run `rm myfile.txt`
 # 11.Which command would you use to delete an empty directory named "mydirectory" in the current directory?
+* To delete an empty directory we can use `rmdir mydirectory`
 # 12.If you want to delete a directory named "mydirectory" and all its contents recursively, which command would you use?
+* To delte an directory with all its contents run `rm -r mydirectory`
 # 13.Which text editor can you use to edit a file named "myfile.txt" in Linux?
+* To edit a file in linux we use Vim and Nano editor.
 # 14.How can you move a file named "myfile.txt" to the directory "/path/to/new/location" using a command?
+* To move a file run `sudo mv myfile.txt /path/to/new/location`
 # 15.What command would you use to rename a file named "oldname.txt" to "newname.txt" in the current directory?
+* To rename a file from the CLI, use the mv command and pass two arguments, the first being the file you wish to rename and the second being the new name you wish to give it: `sudo mv oldname.txt newname.txt`
 # 16.How can I use netstat to display all established network connections?
+* List out all connections The first and most simple command is to list out all the current connections. Simply run the netstat command with the a option. $ netstat -a Active Internet connections.
 # 17.What is the command to show listening ports using netstat?
+* For Microsoft Windows: netstat -ano | find "1234" | find "LISTEN" tasklist /fi "PID eq 1234"
+* For Linux: netstat -anpe | grep "1234" | grep "LISTEN"
 # 18.How do I use netstat to display the routing table?
+* Netstat combined with the -r option will display the kernel routing tables. This is commonly used with the -n option, which will only show numerical addresses rather than performing any sort of name resolution.
 # 19.How can I use ifconfig to view the IP address of a specific network interface?
+* You can use the ifconfig command or ip command with grep command and other filters to find out an IP address assigned to eth0 and display it on screen.
 # 20.What is the command to enable or disable a network interface using ifconfig?
+* ifconfig command: ifconfig command is used to configure a network interface. ...
+ifdown/ifup Command: ifdown command bring the network interface down whereas the ifup command brings the network interface up.
+![preview](images/RWX%20per-3.png)
+![preview](images/RWX%20per-4.png)
 # 21.How do I use ifconfig to change the MAC address of a network interface?
+* url@https://www.makeuseof.com/how-to-change-mac-address-on-linux/#:~:text=Ifconfig%20stands%20for%20Interface%20Config,of%20your%20machine%20using%20ifconfig.&text=Then%20assign%20a%20custom%20MAC%20address%20to%20the%20interface.
 # 22.How can I use the host command to perform a reverse DNS lookup?
+* DNS process is known as forwarding DNS resolution in which it resolves the domain name with an IP address. Whereas, Reverse DNS Resolution or Reverse DNS lookup, also known as rDNS, is used to determine or resolve the IP address associated with the domain name. As the name implies, it is a reverse DNS lookup process that resolves an IP address back to the domain name.
+![preview](images/RWX%20per-5.png)
 # 23.What is the syntax to specify a specific DNS server when using host?
+![preview](images/RWX%20per-6.png)
 # 24.How do I use host to query a specific record type, such as MX or NS?
+![preview](images/RWX%20per-7.png)
+![preview](images/RWX%20per-8.png)
 # 25.What is the command to display the current hostname of a system using hostname?
 # 26.How can I change the hostname of a system using the hostname command?
 # 27.How do I set a fully qualified domain name (FQDN) using hostname?
