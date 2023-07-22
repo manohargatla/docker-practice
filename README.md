@@ -80,8 +80,9 @@ RUN apk add --update  && \
 WORKDIR /tmp/foo
 EXPOSE 3000
 CMD ["npm", "start"]
-![preview](images/docker12.png)
 ```
+![preview](images/docker12.png)
+
 
 Day-3
 -----
