@@ -199,7 +199,7 @@ Create nop commerce and my-sql server  containers and try to make them work by c
 * ![preview](images/nop-doc4.png)
 
 
-Docker Workshop-3 Activities (21/APR/2023) - Khaja Sir   
+Docker Workshop-3 Activities (21/APR/2023)
 ------------------------------------------------------------------------
 
 A) Create a multi-stage docker file to build  
